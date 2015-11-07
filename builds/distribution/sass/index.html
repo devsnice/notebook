@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+
+	<title>Validation form</title>
+	<link rel="stylesheet" href="css/style.min.css">
+	<link rel="stylesheet" href="libs/jquery.avgrund/style/avgrund.css">
+</head>
+<body>
+
+	<main class="container main" role="main">
+		<div class="main__wrap">
+			<div class="form-group">
+    			<label class="form-group__label" for="js-name">Введите ФИО</label>
+				<input type="text" class="form-group__input js-app-name" id="js-name" placeholder="поле для ввода">
+				<div class="form-group__error"></div>
+			</div>
+		
+			<div class="result">
+				<script id="tmpResult" type="text/x-handlebars-template">
+					<div class="result__wrap">
+					<h3>Всё верно?</h3>
+					
+						<table class="result-table">
+							<tr class="result-row">
+								<td class="result-cell">Фамилия:</td>
+								<td class="result-cell">{{surname}}</td>
+							</tr>
+							<tr class="result-row">
+								<td class="result-cell">Имя:</td>
+								<td class="result-cell">{{namefirst}}</td>
+							</tr>
+							<tr class="result-row">
+								<td class="result-cell">Отчество:</td>
+								<td class="result-cell">{{namesecond}}</td>
+							</tr>
+						</table>
+									
+						<button type="button" class="result__submit popup_open">
+							Да, всё верно
+						</button>
+					</div>
+				</script>
+  			</div>
+			  
+
+		</div>
+	</main
+
+  <!-- Add content to the popup -->
+  <div class="popup popup--welcome" id="popup">
+	<script id="tmpPopup" type="text/x-handlebars-template">
+   	 	Добро пожаловать, 
+		{{surname}} {{namefirst}} {{namesecond}}
+
+    <!-- Add an optional button to close the popup -->
+    <i class="popup__close popup_close">&times;</i>
+	</script>
+  </div>
+	
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="js/handlebars.min.js"></script>
+	<script src="js/app.js"></script>
+</body>
+</html>
