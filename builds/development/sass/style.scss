@@ -1,12 +1,40 @@
 // include blocks
 @import "_excess";
 @import "_reset";
+@import "_const";
 
 // Include extend-blocks
+@import "block/_wrapper";
+@import "block/_header";
+@import "block/_logotype";
+@import "block/_profile";
+@import "block/_button";
 
+// Note
+@import "block/_newnote";
+@import "block/_note";
 
 // some code
 html, body {
 	font-size: 16px;
 	line-height: 24px;
+	width: 100%;
+	height: 100%;
+	font-family: $serif;
+}
+
+
+.app-notes {
+	width: 100%;
+	padding: 10px 0 40px;
+}
+
+
+.list {
+	font-size: 0;
+}
+
+
+.control {
+	text-align: center;
 }

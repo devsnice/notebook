@@ -26,6 +26,15 @@ gulp.task('html', function() {
     .pipe(gulp.dest('builds/distribution/'))
 });
 
+// gulp.task('webserver', function() {
+//   gulp.src('app')
+//     .pipe(webserver({
+//       path: '/builds/distribution',
+//       livereload: true,
+//       directoryListing: true,
+//       open: true
+//     }));
+// });
 
 gulp.task('watch', function() {
   gulp.watch('builds/development/js/**/*.js', ['js']);
@@ -39,6 +48,7 @@ gulp.task('libs', function() {
 });
 
 gulp.task('default', [
+//  'webserver',
   'libs',
   'html',
   'js',

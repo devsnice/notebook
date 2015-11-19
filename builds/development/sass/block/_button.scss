@@ -1,0 +1,25 @@
+
+.button {
+	height: 37px;
+	line-height: 37px;
+	padding: 0 10px;
+	border: 1px solid #263238;
+	background: #263238;
+	color: #fff;
+	text-align: center;
+	display: inline-block;
+	cursor: pointer;
+	font-family: $istok;
+	text-transform: lowercase;
+	font-weight: 300;
+	transition: 0.4s ease;
+	
+	&:hover {
+		background: none;
+		color: #263238;
+		
+		.fa {
+			transform: rotate(360deg);
+		}
+	}
+}

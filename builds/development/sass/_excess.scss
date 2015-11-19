@@ -1,6 +1,7 @@
 body, html {
   width: 100%;
   word-wrap: break-word;
+  letter-spacing: 0.2;
 }
 
 
@@ -10,4 +11,19 @@ body, html {
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
             box-sizing: border-box;
+}
+
+.i {
+  &-clearfix {
+  	zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+
+      &:before, &:after {
+  		content: "";
+    	    display: table;
+      }
+
+      &:after {
+  		clear: both;
+    	}
+  }
 }
