@@ -21,31 +21,7 @@
 		}
 	}
 	
-	// note with style for adding new note
-	&-add {
-		line-height: 240px;
-		font-size: 32px;
-		//font-family: $istok;
-		//letter-spacing: -0.5px;
-		color:rgba(#1e88e5, 0.65);
-		
-		.note-inner {
-			text-align: center;
-			border-color: rgba(#1e88e5, 0.25);
-			
-		}
-	  
-	  &__preview {
-		  padding: 10px 0;
-		  width: 100%;
-		  height: 100%;
-		  font-family: $serif;
-		  font-size: 22px;
-		  line-height: 24px;
-		  border: none;
-		  color: #575757;
-	  }
-	}
+
 	
 	&-inner {
 		position: relative;
@@ -81,4 +57,36 @@
 			border: 0px;
 		}
 		
+		// note with style for adding new note
+	&-add {
+		line-height: 240px;
+		font-size: 32px;
+		//font-family: $istok;
+		//letter-spacing: -0.5px;
+		color:rgba(#1e88e5, 0.65);
+
+		&__preview {
+			padding: 10px 0;
+			width: 100%;
+			height: 100%;
+			font-family: $serif;
+			font-size: 18px;
+			line-height: 22px;
+			border: none;
+			color: #575757;
+			resize: none;
+		}
+		
+		.note-inner {
+			&:after {
+				width: 70px;
+				height: 40px;
+				right: 0;
+				font-family:'FontAwesome';
+				content: "f055";
+				color: #fff;
+				
+			}
+		}
+	}
 }
