@@ -8,6 +8,7 @@
 	<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Istok+Web:400,400italic,700italic,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	
 	<link rel="stylesheet" href="css/style.min.css">
 	
 </head>
@@ -22,7 +23,9 @@
 			</h1>
 			
 			<div class="profile profile_header">
-				you have 1 note
+				<div class="profile__count" id="notebook-amount">
+					
+				</div>
 			</div>
 		</div>
 	</header>
@@ -35,28 +38,13 @@
 				<ul class="list" id="notebook-list">
 					<li class="note note-add">
 						<div class="note-inner">
-							<textarea class="note-add__preview" placeholder="add note" id="notebook-add"></textarea>
+							<textarea class="note-add__input" id="notebook-add" placeholder="Add new note, please, add new noteeee"></textarea>
+							<div class="note-add__ph">
+								Add new note
+							</div>
 						</div>
 					</li>
-					
-					<li class="note">
-						
-						<article class="note-inner">
-							<header class="note-data">
-								<div class="note-data__date">
-									3 минуты назад
-								</div>
-							</header>
-							
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium, a, possimus. Ipsum soluta porro laudantium sit quae consequuntur vero ipsa! Temporibus, maiores harum natus rerum quaerat, culpa impedit placeat delectus error, laboriosam quas consequatur. Fuga blanditiis, dolore non voluptatem doloribus, eius perferendis laborum omnis rerum. 
-							</p>
-						</article>
-					</li>
-					
-					
-				
-					
+	
 				</ul>
 				
 				<!--<nav class="control">
@@ -72,11 +60,6 @@
 	</main>
 
 	<script src="libs/jquery/jquery.js"></script>
-	
-	<!-- If we need in handlebars-->
-	<!--
-		<script src="js/handlebars.min.js"></script>
-	-->
 	<script src="js/app.js"></script>
 </body>
 </html>

@@ -1,61 +1,160 @@
 (function(){
 	app = function() {
 		
+		
+		// Module - TransformTime, for creating string-time for different real-time
+		var transformTime = function() {
+			
+		}
+		
 		// Module - Notebook
 		var notebook = function(elemAdd, elemList) {
 			
+		
+			// Object - Model for work with localstorage
+			var model = function() {
+				var model = function() {}
+					
+				// Method for creating new structre of local-storage
+				model.prototype.create = function() {
+					Lockr.set("countNotes", 0);
+					Lockr.set("countElems", 0);
+				}
+				
+				// Method for adding new note in local-storage
+				model.prototype.add = function(note) {
+					var currentCount = Lockr.get("countElems"),
+						currentNote  = Lockr.get("countNotes");
+					
+					Lockr.set(currentNote, note);
+					Lockr.set("countNotes", currentNote + 1);
+					Lockr.set("countElems", currentCount + 1);
+				}
+				
+				// Method for detele note with id = id from local-storage
+				model.prototype.delete = function(id) {
+					Lockr.set(id, null);
+				}
+				
+				// Method for getting All notes from local-storage
+				model.prototype.getAll = function() {
+					var result = [];
+					
+					for(var i = 0, countElems = Lockr.get("countElems"); i < countElems; i++) {
+						var elem = Lockr.get(i);
+						result[result.length] = elem;
+					}
+					
+					return result;
+				}
+				
+				
+				// Method for getting last-note form local-storage
+				model.prototype.getLast = function() {
+					var lastNote = Lockr.get(Lockr.get("countElems")-1);
+					
+					return lastNote;
+				}
+				
+				// Function for getting information about note's amount in local-storage
+				model.prototype.getCount = function() {
+					var notes;
+				
+					if((count = Lockr.get("countElems")) >= 0) {
+						return count;
+					}
+					else {
+						return null;
+					}
+				}
+				
+				var newModel = new model();
+			
+				return newModel;
+			}
+	
 			// Object - Note
-			var note = function(text, date) {
-				var note = function(text, date) {
+			var note = function(text, date, noteId) {
+				var note = function(text, date, noteId) {
 					this.text = text,
 					this.date = date,
-					this.elem = ''
+					this.id = noteId
 				}
 				
-				note.prototype.add = function() {
+				note.prototype.view = function(nodeAdd) {
+					// Here, we should put new dom's element in property - elem
+					var template = "<li class='note' data-id='"+ this.id +"'><article class='note-inner'><header class='note-data'><div class='note-data__date'>" + this.date + "</div></header><p>" + this.text + "</p><div class='note-control'><i class='fa fa-trash-o note-delete'></i></div></article></li>";
 					
+					$(".note-add").after(template);
 				}
-				
-				note.prototype.view = function() {
-					// here, we should put new dom's element in property - elem
-				}
-				
-				note.prototype.delete = function() {
-					
-				}
-			
-				var newNote = new note(text, date);
-				
+		
+				var newNote = new note(text, date, noteId);
+							
 				return newNote;
 			}
-				
+			
+			
 			// Object notebook
-			var notebook = function(elemAdd, elemList) {
+			var notebook = function(elemAdd, elemList, elemCount) {
 				this.elemAdd = $(elemAdd),
+				this.countView = $(elemCount),
 				this.elemList = $(elemList),
-				this.notes = [],
-				this.mount = 0
+				this.model = new model()
 			}
 			
 			notebook.prototype.addNote = function(text, date) {
+				var newNoteId = this.model.getCount();
+				
 				// create new note-object
-				var newNote = new note(text, date);
-				// add in notebook
-				this.notes[this.count] = newNote;
-				// increment mount of notes
-				this.mount++;
+				var newNote = new note(text, date, newNoteId);
+				// add in Model
+				this.model.add(newNote);
+				// 
+				this.viewCount();
+			}
+			
+			notebook.prototype.deleteNote = function(id) {
+				this.model.delete(id);
+				this.viewCount();
+			}
+			
+			
+			notebook.prototype.viewCount = function() {
+				var count = this.model.getCount(),
+					result = "";
+				
+				if(count == 0 && null) {
+					result = "You haven't got any notes, change it!"
+				}
+				else {
+					result = "You have " + count + " notes";
+				}
+				
+				console.log(result);
+				this.countView.text(result);
 			}
 			
 			notebook.prototype.viewLast = function() {
-				this.notes[this.count].view();
+				var lastNote = this.model.getLast();
+				
+				var currentNote = new note(lastNote.text, lastNote.date, lastNote.id);
+					
+					currentNote.view(this.elemAdd);
 			}
 			
 			notebook.prototype.viewAllNote = function() {
-				for(var i = 0, length = this.count; i < length; i++) {
-					this.notes[i].view();
+				var notes = this.model.getAll();
+						
+						
+				for(var i = 0, length = notes.length; i < length; i++) {
+					if(notes[i] != null) {
+						var currentNote = new note(notes[i].text, notes[i].date, notes[i].id);
+						currentNote.view(this.elemAdd);	
+					}
 				}
 			}
 			
+			// Controller
 			// Initialize notebook, add binds elem
 			function init(notes) {
 				
@@ -63,8 +162,22 @@
 					notebook : notes
 				}
 				
-				notes.elemAdd.keypress(eventData, function(e) {
-					if(e.charCode == "0") {
+				//Lockr.flush();
+							
+				// Create new element in local-storage
+				if(notes.model.getCount() == null)	{
+					notes.model.create();
+				}
+				// Or, if local-storage was created - view all notes
+				else {
+					notes.viewAllNote();
+					notes.viewCount();
+				}
+				
+				// Handler for adding new note
+				notes.elemAdd.keydown(eventData, function(e) {
+								
+					if(e.keyCode == 13) {
 						var text = $(this).val(),
 							date = new Date();
 						
@@ -75,10 +188,26 @@
 						eventData.notebook.viewLast();
 						
 						// Clear area
-						$(this).val("");
+						$(this).val(null);
 					}
 					
 				});
+				
+				// Handler for working with user's actions
+				notes.elemList.click(eventData, function(event) {
+					var elemClicked = event.target;
+					
+					// Delete note from notebook
+					if($(elemClicked).hasClass("note-delete")) {
+						var noteDelete = $(elemClicked).parents(".note"),
+							noteDeleteId = noteDelete.data("id");
+							noteDelete.remove();
+							
+						eventData.notebook.deleteNote(noteDeleteId);
+					}
+				});
+				
+				alert("init!");
 			}
 			
 			var notes = new notebook(elemAdd, elemList);
@@ -89,11 +218,13 @@
 		}
 				
 		app.init = function() {
-			var nb = new notebook("#notebook-add", "#notebook-list");
+			var nb = new notebook("#notebook-add", "#notebook-list", "#notebook-amount");
 		}
+		
+		transformTime();
 		
 		return app.init();
 	}
 	
-	var application = new app(); 
+	var application = new app();
 }());

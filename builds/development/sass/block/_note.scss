@@ -8,6 +8,8 @@
 	height: 300px;
 	cursor: pointer;
 	color: #455a64;
+	position: relative;
+	transition: 0.4s ease;
 	
 	&-data {
 		height: 30px;
@@ -21,6 +23,21 @@
 		}
 	}
 	
+	&-control {
+		width: 100%;
+		height: 100%;	
+		position: absolute;
+		top: 0;
+		left: 0;
+		text-align: center;
+		font-size: 40px;
+		color:#616161;
+		background: rgba(white, 0.8);
+		padding: 118px 0 0;
+		display: none;
+		transition: 0.4s ease;
+	}
+	
 
 	
 	&-inner {
@@ -31,6 +48,7 @@
 		padding: 4px 8px;
 		background: #fff;
 		overflow: hidden;
+		transition: 0.4s ease;
 		
 		&:after {
 			content: "";
@@ -46,26 +64,39 @@
 			background: -o-linear-gradient(top, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0) 0%, rgba(252,252,252,1) 100%);
 			background: -ms-linear-gradient(top, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0) 0%, rgba(252,252,252,1) 100%);
 			background: linear-gradient(to bottom, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0) 0%, rgba(252,252,252,1) 100%);
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#fcfcfc', GradientType=0 );	}
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#fcfcfc', GradientType=0 );	
+		}
 		
 			//background-color: rgba(255,255,255,0.01);
 			//background: @include filter-gradient(#ffffff, #ffffff, vertical);
 			//background: @include background-image(linear-gradient(top, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0) 0%, rgba(252,252,252,1) 100%));
+		
 		}
 		
+		// &:hover {
+		// 	box-shadow: 1px 1px 1px -1px rgba(0,0,0,0.7);
+		// 	border: 0px;
+		// }
+		
 		&:hover {
-			border: 0px;
+			.note-control {
+				display: block;
+			}
+			
+			.note-inner {
+				box-shadow: 0 0 4px 1px rgba(0,0,0,.2);
+				border: 0;
+			}
 		}
 		
 		// note with style for adding new note
 	&-add {
 		line-height: 240px;
-		font-size: 32px;
 		//font-family: $istok;
 		//letter-spacing: -0.5px;
 		color:rgba(#1e88e5, 0.65);
 
-		&__preview {
+		&__input {
 			padding: 10px 0;
 			width: 100%;
 			height: 100%;
@@ -77,6 +108,18 @@
 			resize: none;
 		}
 		
+		&__ph {
+			position: absolute;
+			font-size: 24px;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			text-align: center;
+			display: none;
+			
+		}
+		
 		.note-inner {
 			&:after {
 				width: 70px;
@@ -85,8 +128,16 @@
 				font-family:'FontAwesome';
 				content: "f055";
 				color: #fff;
-				
+			
 			}
+		
 		}
+		
+		
+		&:active, &:focus, &:hover {
+				.note-add__ph {
+					display: 0;
+				}
+			}
 	}
 }
