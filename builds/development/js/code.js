@@ -8,7 +8,7 @@
 		}
 		
 		// Module - Notebook
-		var notebook = function(elemAdd, elemList) {
+		var notebook = function(elemAdd, elemList, elemCount) {
 			
 		
 			// Object - Model for work with localstorage
@@ -33,7 +33,12 @@
 				
 				// Method for detele note with id = id from local-storage
 				model.prototype.delete = function(id) {
+					var currentCount = Lockr.get("countElems"),
+						currentNote  = Lockr.get("countNotes");
+						
 					Lockr.set(id, null);
+					
+					Lockr.set("countNotes", currentNote - 1);
 				}
 				
 				// Method for getting All notes from local-storage
@@ -48,6 +53,22 @@
 					return result;
 				}
 				
+				// Method for optimize memory of localstorage
+				model.prototype.fillEmptyMemmories = function() {
+					var currentElem;
+					
+					for(var i = 0, length = Lockr.get("countElems"); i < length; i++) {
+						currentElem = Lockr.get(i);
+						
+						if(currentElem == null) {
+							for(var j = i ; j < length - 1; j++) {
+								Lockr.set(j, Lockr.get(j+1));
+							} 
+						}
+					}
+					
+					Lockr.set("countElems", Lockr.get("countNotes"));
+				}
 				
 				// Method for getting last-note form local-storage
 				model.prototype.getLast = function() {
@@ -55,8 +76,8 @@
 					
 					return lastNote;
 				}
-				
-				// Function for getting information about note's amount in local-storage
+			
+				// Function for getting information about amount elements in local-storage, notes and empty-notes(note which was deleted)
 				model.prototype.getCount = function() {
 					var notes;
 				
@@ -67,6 +88,19 @@
 						return null;
 					}
 				}
+				
+				// Function for getting information about note's amount in local-storage
+				model.prototype.getCountElements = function() {
+					var notes;
+				
+					if((count = Lockr.get("countNotes")) >= 0) {
+						return count;
+					}
+					else {
+						return null;
+					}
+				}
+				
 				
 				var newModel = new model();
 			
@@ -120,10 +154,10 @@
 			
 			
 			notebook.prototype.viewCount = function() {
-				var count = this.model.getCount(),
+				var count = this.model.getCountElements(),
 					result = "";
 				
-				if(count == 0 && null) {
+				if(count == 0 || count == null) {
 					result = "You haven't got any notes, change it!"
 				}
 				else {
@@ -131,13 +165,13 @@
 				}
 				
 				console.log(result);
-				this.countView.text(result);
+				this.countView.html(result);
 			}
 			
 			notebook.prototype.viewLast = function() {
 				var lastNote = this.model.getLast();
 				
-				var currentNote = new note(lastNote.text, lastNote.date, lastNote.id);
+				var currentNote = new note(lastNote.text, lastNote.date, this.model.getCount());
 					
 					currentNote.view(this.elemAdd);
 			}
@@ -148,8 +182,8 @@
 						
 				for(var i = 0, length = notes.length; i < length; i++) {
 					if(notes[i] != null) {
-						var currentNote = new note(notes[i].text, notes[i].date, notes[i].id);
-						currentNote.view(this.elemAdd);	
+						var currentNote = new note(notes[i].text, notes[i].date, i);
+						currentNote.view(this.elemAdd);
 					}
 				}
 			}
@@ -163,6 +197,7 @@
 				}
 				
 				//Lockr.flush();
+				notes.viewCount();
 							
 				// Create new element in local-storage
 				if(notes.model.getCount() == null)	{
@@ -170,8 +205,13 @@
 				}
 				// Or, if local-storage was created - view all notes
 				else {
+					// If in previous-session user delete some notes, app should come right all elements and delete 
+					if(notes.model.getCount() != notes.model.getCountElements()) {
+						notes.model.fillEmptyMemmories();	
+					}
+					
+					// View all notes of user
 					notes.viewAllNote();
-					notes.viewCount();
 				}
 				
 				// Handler for adding new note
@@ -207,10 +247,9 @@
 					}
 				});
 				
-				alert("init!");
 			}
 			
-			var notes = new notebook(elemAdd, elemList);
+			var notes = new notebook(elemAdd, elemList, elemCount);
 			
 			init(notes);
 			
