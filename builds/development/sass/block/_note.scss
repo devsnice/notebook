@@ -146,4 +146,21 @@
 				}
 			}
 	}
+	
+	@media screen and (max-width: 1360px) {
+  	  width: 25%;
+ 	}
+	  
+	@media screen and (max-width: 980px) {
+  	  width: 33.3333333%;
+ 	}
+	  
+	@media screen and (max-width: 768px) {
+  	  width: 50%;
+ 	}
+	  
+	@media screen and (max-width: 361px) {
+  	  width: 100%;
+ 	}
+
 }

@@ -1,4 +1,10 @@
 .wrapper {
-	width: 1200px;
+	box-sizing: padding-box;
+	max-width: 1200px;
 	margin: auto;
+	
+	@media screen and (max-width: 1200px) {
+  	  padding: 0 40px;
+ 	 }
 }
+

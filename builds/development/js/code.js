@@ -29,6 +29,8 @@
 					Lockr.set(currentNote, note);
 					Lockr.set("countNotes", currentNote + 1);
 					Lockr.set("countElems", currentCount + 1);
+					
+					console.log(this.getAll());
 				}
 				
 				// Method for detele note with id = id from local-storage
@@ -154,7 +156,7 @@
 			}
 			
 			notebook.prototype.validate = function(text) {
-				if(text.length > 5) {
+				if(text.length >= 5 && text.length <= 200) {
 					return true;
 				}
 				else {
@@ -239,7 +241,7 @@
 							// View new note
 							eventData.notebook.viewLast();
 							
-							// Clear area
+							// Clear textarea
 							$(eventData.notebook.elemAdd).val(null);
 						
 						}
