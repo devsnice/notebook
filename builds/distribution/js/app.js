@@ -194,8 +194,6 @@
 					Lockr.set(currentNote, note);
 					Lockr.set("countNotes", currentNote + 1);
 					Lockr.set("countElems", currentCount + 1);
-					
-					console.log(this.getAll());
 				}
 				
 				// Method for detele note with id = id from local-storage
@@ -239,7 +237,8 @@
 				
 				// Method for getting last-note form local-storage
 				model.prototype.getLast = function() {
-					var lastNote = Lockr.get(Lockr.get("countElems")-1);
+					// -1, cause (id = 0,1,2)
+					var lastNote = Lockr.get(this.getCountElements()-1);
 					
 					return lastNote;
 				}
@@ -346,8 +345,8 @@
 			
 			notebook.prototype.viewLast = function() {
 				var lastNote = this.model.getLast();
-				
-				var currentNote = new note(lastNote.text, lastNote.date, this.model.getCount());
+								
+				var currentNote = new note(lastNote.text, lastNote.date, this.model.getCountElements());
 					
 					currentNote.view(this.elemAdd);
 			}
