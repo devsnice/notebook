@@ -173,7 +173,7 @@
 		}
 		
 		// Module - Notebook
-		var notebook = function(elemAdd, elemList, elemCount) {
+		var notebook = function(elemAdd, elemList, elemCount, elemSubmit) {
 			
 		
 			// Object - Model for work with localstorage
@@ -294,10 +294,11 @@
 			
 			
 			// Object notebook
-			var notebook = function(elemAdd, elemList, elemCount) {
+			var notebook = function(elemAdd, elemList, elemCount, elemSubmit) {
 				this.elemAdd = $(elemAdd),
 				this.countView = $(elemCount),
 				this.elemList = $(elemList),
+				this.elemSubmit = $(elemSubmit)
 				this.model = new model()
 			}
 			
@@ -317,6 +318,14 @@
 				this.viewCount();
 			}
 			
+			notebook.prototype.validate = function(text) {
+				if(text.length > 5) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
 			
 			notebook.prototype.viewCount = function() {
 				var count = this.model.getCountElements(),
@@ -371,7 +380,7 @@
 				// Or, if local-storage was created - view all notes
 				else {
 					// If in previous-session user delete some notes, app should come right all elements and delete 
-					if(notes.model.getCount() != notes.model.getCountElements()) {
+					if(notes.model.getCount() != notes.model. getCountElements()) {
 						notes.model.fillEmptyMemmories();	
 					}
 					
@@ -379,22 +388,29 @@
 					notes.viewAllNote();
 				}
 				
-				// Handler for adding new note
-				notes.elemAdd.keydown(eventData, function(e) {
+				
+					// Handler for adding new note
+				notes.elemSubmit.click(eventData, function(e) {
 								
-					if(e.keyCode == 13) {
-						var text = $(this).val(),
+						var text = $(eventData.notebook.elemAdd).val(),
 							date = new Date();
+							
+						// Validation
+						if(notes.validate(text)) {
+										
+							// Create new note
+							eventData.notebook.addNote(text, date);
+							
+							// View new note
+							eventData.notebook.viewLast();
+							
+							// Clear area
+							$(eventData.notebook.elemAdd).val(null);
 						
-						// Create new note
-						eventData.notebook.addNote(text, date);
-						
-						// View new note
-						eventData.notebook.viewLast();
-						
-						// Clear area
-						$(this).val(null);
-					}
+						}
+						else {
+							alert("Note should has more than 5 symbols!");
+						}
 					
 				});
 				
@@ -406,7 +422,7 @@
 					if($(elemClicked).hasClass("note-delete")) {
 						var noteDelete = $(elemClicked).parents(".note"),
 							noteDeleteId = noteDelete.data("id");
-							noteDelete.remove();
+							noteDelete.fadeOut(600);
 							
 						eventData.notebook.deleteNote(noteDeleteId);
 					}
@@ -414,7 +430,7 @@
 				
 			}
 			
-			var notes = new notebook(elemAdd, elemList, elemCount);
+			var notes = new notebook(elemAdd, elemList, elemCount, elemSubmit);
 			
 			init(notes);
 			
@@ -422,7 +438,7 @@
 		}
 				
 		app.init = function() {
-			var nb = new notebook("#notebook-add", "#notebook-list", "#notebook-amount");
+			var nb = new notebook("#notebook-add", "#notebook-list", "#notebook-amount", "#notebook-submit");
 		}
 		
 		transformTime();

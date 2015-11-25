@@ -67,17 +67,13 @@
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#fcfcfc', GradientType=0 );	
 		}
 		
-			//background-color: rgba(255,255,255,0.01);
-			//background: @include filter-gradient(#ffffff, #ffffff, vertical);
-			//background: @include background-image(linear-gradient(top, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0) 0%, rgba(252,252,252,1) 100%));
+			// background-color: rgba(255,255,255,0.01);
+			// background: @include filter-gradient(#ffffff, #ffffff, vertical);
+			// background: @include background-image(linear-gradient(top, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0) 0%, rgba(252,252,252,1) 100%));
 		
 		}
 		
-		// &:hover {
-		// 	box-shadow: 1px 1px 1px -1px rgba(0,0,0,0.7);
-		// 	border: 0px;
-		// }
-		
+	
 		&:hover {
 			.note-control {
 				display: block;
@@ -92,9 +88,8 @@
 		// note with style for adding new note
 	&-add {
 		line-height: 240px;
-		//font-family: $istok;
-		//letter-spacing: -0.5px;
 		color:rgba(#1e88e5, 0.65);
+		
 
 		&__input {
 			padding: 10px 0;
@@ -108,31 +103,42 @@
 			resize: none;
 		}
 		
-		&__ph {
-			position: absolute;
-			font-size: 24px;
-			width: 100%;
-			height: 100%;
-			top: 0;
-			left: 0;
+		&__submit {
+			position:  absolute;
+			padding: 0 10px;
+			border: 2px solid #eee;
+			border-radius: 100%;
+			height: 40px;
+			line-height: 40px;
+			bottom: 10px;
+			right: 10px;
 			text-align: center;
-			display: none;
+			background:#2196f3;
+			color: #fff;
+			font-size: 20px;
+			z-index: 1000;
+			transition: 0.4s ease;	
 			
+			&:hover {
+				background: #1976d2;
+			}
+			
+			&:active {
+				background: #0d47a1;
+			}
 		}
 		
 		.note-inner {
-			&:after {
-				width: 70px;
-				height: 40px;
-				right: 0;
-				font-family:'FontAwesome';
-				content: "f055";
-				color: #fff;
+			border-color: rgba(#1976d2, 0.5);
 			
+			&:hover {
+				box-shadow: 0 0 4px 2px rgba(#1976d2, .4);
 			}
-		
+			
+			&:after {
+				display: none;
+			}	
 		}
-		
 		
 		&:active, &:focus, &:hover {
 				.note-add__ph {
