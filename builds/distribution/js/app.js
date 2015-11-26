@@ -167,15 +167,64 @@
 	app = function() {
 		
 		
-		// Module - TransformTime, for creating string-time for different real-time
-		var transformTime = function() {
-			
-		}
-		
 		// Module - Notebook
 		var notebook = function(elemAdd, elemList, elemCount, elemSubmit) {
 			
 		
+			// Module - TransformTime, for creating string-time for different real-time
+			var transformTime = function() {
+				
+				var transformTime = function() {
+					this.second = 1000,
+					this.minute = 60 * this.second,
+					this.hour = 60 * this.minute,
+					this.day = 24 * this.hour,
+					this.week = 7 * this.day,
+					this.month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+				}
+				
+				transformTime.prototype.live = function(time) {
+					var timeNow = Date.now(),
+						timeCreate = new Date(time),
+						timePass = timeNow - time,
+						result = '';
+					
+					switch(true) {
+						// If passed less than minute
+						case (timePass <= this.minute) :
+							result = "A moment ago";
+							break;
+						// If passed less than hour
+						case (timePass >= this.minute && timePass < this.hour) :
+							result = parseInt(timePass / this.minute) + " minutes ago";
+							break;
+						// If passed more than hour
+						case(timePass >= this.hour) :
+							var timeNowDate = new Date(timeNow),
+								timePassDate = new Date(timePass);
+							
+							if(((timeNowDate.getDay() - timePassDate.getDay()) != 1) && (timePass >= this.week) ) {
+								result = timeCreate.getDate() + " " + this.month[timeCreate.getMonth()] + " at " + timeCreate.getHours() + ":" + timeCreate.getMinutes();
+							}
+							// If it was yesterday
+							else {
+								result = "Yesterday, at " + timeCreate.getHours() + ":" + timeCreate.getMinutes();
+							}
+							break;
+						default :
+							result = timePass;	
+					}
+					
+					return result;	
+				}
+				
+				
+				var newTransformTime = new transformTime();
+				
+				return newTransformTime;
+				
+			}
+			
 			// Object - Model for work with localstorage
 			var model = function() {
 				var model = function() {}
@@ -274,21 +323,25 @@
 			}
 	
 			// Object - Note
-			var note = function(text, date, noteId) {
-				var note = function(text, date, noteId) {
+			var note = function(text, date, timeLive, noteId) {
+				
+				var note = function(text, date, timeLive, noteId) {
 					this.text = text,
 					this.date = date,
+					this.viewTime = timeLive,
 					this.id = noteId
 				}
 				
 				note.prototype.view = function(nodeAdd) {
+					
 					// Here, we should put new dom's element in property - elem
-					var template = "<li class='note' data-id='"+ this.id +"'><article class='note-inner'><header class='note-data'><div class='note-data__date'>" + this.date + "</div></header><p>" + this.text + "</p><div class='note-control'><i class='fa fa-trash-o note-delete'></i></div></article></li>";
+					var template = "<li class='note' data-id='"+ this.id +"'><article class='note-inner'><header class='note-data'><div class='note-data__date'>" + this.viewTime + "</div></header><p>" + this.text + "</p><div class='note-control'><i class='fa fa-trash-o note-delete'></i></div></article></li>";
 					
 					$(".note-add").after(template);
 				}
 		
-				var newNote = new note(text, date, noteId);
+
+				var newNote = new note(text, date, timeLive, noteId);
 							
 				return newNote;
 			}
@@ -299,15 +352,18 @@
 				this.elemAdd = $(elemAdd),
 				this.countView = $(elemCount),
 				this.elemList = $(elemList),
-				this.elemSubmit = $(elemSubmit)
+				this.elemSubmit = $(elemSubmit),
+				this.transformTime = new transformTime(),
 				this.model = new model()
 			}
 			
 			notebook.prototype.addNote = function(text, date) {
 				var newNoteId = this.model.getCount();
 				
+				// date hold as amount msecond with 1970.1.1
+				date = date - new Date(0);
 				// create new note-object
-				var newNote = new note(text, date, newNoteId);
+				var newNote = new note(text, date, this.transformTime.live(date), newNoteId);
 				// add in Model
 				this.model.add(newNote);
 				// 
@@ -320,7 +376,7 @@
 			}
 			
 			notebook.prototype.validate = function(text) {
-				if(text.length >= 5 && text.length <= 200) {
+				if(text.length >= 5 && text.length <= 700) {
 					return true;
 				}
 				else {
@@ -339,14 +395,13 @@
 					result = "You have " + count + " notes";
 				}
 				
-				console.log(result);
 				this.countView.html(result);
 			}
 			
 			notebook.prototype.viewLast = function() {
 				var lastNote = this.model.getLast();
 								
-				var currentNote = new note(lastNote.text, lastNote.date, this.model.getCountElements());
+				var currentNote = new note(lastNote.text, lastNote.date, this.transformTime.live(lastNote.date), this.model.getCountElements());
 					
 					currentNote.view(this.elemAdd);
 			}
@@ -357,7 +412,7 @@
 						
 				for(var i = 0, length = notes.length; i < length; i++) {
 					if(notes[i] != null) {
-						var currentNote = new note(notes[i].text, notes[i].date, i);
+						var currentNote = new note(notes[i].text, notes[i].date, this.transformTime.live(notes[i].date), i);
 						currentNote.view(this.elemAdd);
 					}
 				}
@@ -370,6 +425,7 @@
 				eventData = {
 					notebook : notes
 				}
+				
 				
 				//Lockr.flush();
 				notes.viewCount();
@@ -432,6 +488,7 @@
 			}
 			
 			var notes = new notebook(elemAdd, elemList, elemCount, elemSubmit);
+		
 			
 			init(notes);
 			
@@ -441,11 +498,10 @@
 		app.init = function() {
 			var nb = new notebook("#notebook-add", "#notebook-list", "#notebook-amount", "#notebook-submit");
 		}
-		
-		transformTime();
-		
+				
 		return app.init();
 	}
+
 	
 	var application = new app();
 }());
