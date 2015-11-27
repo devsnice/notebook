@@ -203,7 +203,7 @@
 							var timeNowDate = new Date(timeNow),
 								timePassDate = new Date(timePass);
 							
-							if(((timeNowDate.getDay() - timePassDate.getDay()) != 1) && (timePass >= this.week) ) {
+							if(((timeNowDate.getDay() - timePassDate.getDay()) != 1) && (timePass <= this.week) ) {
 								result = timeCreate.getDate() + " " + this.month[timeCreate.getMonth()] + " at " + timeCreate.getHours() + ":" + timeCreate.getMinutes();
 							}
 							// If it was yesterday
@@ -353,6 +353,7 @@
 				this.countView = $(elemCount),
 				this.elemList = $(elemList),
 				this.elemSubmit = $(elemSubmit),
+				this.elemAmount = $("#note-add__amount"),
 				this.transformTime = new transformTime(),
 				this.model = new model()
 			}
@@ -392,7 +393,12 @@
 					result = "You haven't got any notes, change it!"
 				}
 				else {
-					result = "You have " + count + " notes";
+					if(count == 1) {
+						result = "You have " + count + " note";
+					}
+					else {
+						result = "You have " + count + " note	s";
+					}
 				}
 				
 				this.countView.html(result);
@@ -463,10 +469,13 @@
 							
 							// Clear textarea
 							$(eventData.notebook.elemAdd).val(null);
+							
+							// Clear count
+							$(eventData.notebook.elemAmount).text("0");
 						
 						}
 						else {
-							alert("Note should has more than 5 symbols!");
+							alert("Note should has more than 5 symbols and less than 700!");
 						}
 					
 				});
@@ -483,6 +492,17 @@
 							
 						eventData.notebook.deleteNote(noteDeleteId);
 					}
+				});
+				
+				
+				// Handler for count amount symbols in user's note
+				notes.elemAdd.keydown(eventData, function(e) {
+								
+						var text = $(eventData.notebook.elemAdd).val(),
+							length = text.length;
+							
+						eventData.notebook.elemAmount.text(length+1);
+
 				});
 				
 			}
