@@ -9,7 +9,7 @@ var bc = './bower_components/';
 
 gulp.task('js', function() {
   gulp.src('builds/development/js/**/*.js')
-    .pipe(concat('app.js'))
+    //.pipe(concat('app.js'))
     .pipe(gulp.dest('builds/distribution/js/'))
 });
 
