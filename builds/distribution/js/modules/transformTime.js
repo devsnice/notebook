@@ -32,7 +32,9 @@ define(['jquery'], function () {
 						timePassDate = new Date(timePass);
 					
 					if(((timeNowDate.getDay() - timePassDate.getDay()) != 1) && (timePass <= this.week) ) {
-						result = timeCreate.getDate() + " " + this.month[timeCreate.getMonth()] + " at " + timeCreate.getHours() + ":" + timeCreate.getMinutes();
+						var minutes = timeCreate.getMinutes() > 9 ? timeCreate.getMinutes() : "0" + timeCreate.getMinutes();
+						
+						result = timeCreate.getDate() + " " + this.month[timeCreate.getMonth()] + " at " + timeCreate.getHours() + ":" + minutes;
 					}
 					// If it was yesterday
 					else {

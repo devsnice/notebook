@@ -47,7 +47,7 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 				result = "";
 			
 			if(count == 0 || count == null) {
-				result = "You haven't got any notes, change it!"
+				result = "Don't have notes"
 			}
 			else {
 				if(count == 1) {
@@ -82,8 +82,7 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 		}
 		
 		
-		
-		
+	
 		// Controller
 		// Initialize notebook, add binds elem
 		function init(notes) {
@@ -92,7 +91,6 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			}
 			
 			
-			//Lockr.flush();
 			notes.viewCount();
 						
 			// Create new element in local-storage
@@ -155,13 +153,22 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			
 			
 			// Handler for count amount symbols in user's note
-			notes.elemAdd.keydown(eventData, function(e) {
-							
-					var text = $(eventData.notebook.elemAdd).val(),
-						length = text.length;
-						
-					eventData.notebook.elemAmount.text(length+1);
-	
+			notes.elemAdd.keyup(eventData, function(e) {
+				var text = $(eventData.notebook.elemAdd).val(),
+					length = text.length;
+				
+				eventData.notebook.elemAmount.text(length);
+			
+			});
+			
+			// Element for scroll up
+			$(document).scroll(function(e){
+				if( $(window).scrollTop() > parseInt($("body").css("height"))) {
+					$("#js-submit-mobile").fadeIn("slow");	
+				}
+				else {
+					$("#js-submit-mobile").fadeOut("slow");	
+				}
 			});
 			
 		}

@@ -3,11 +3,11 @@
 	display: inline-block;
 	padding: 15px 10px;
 	font-size: 16px;
+	cursor: pointer;
+	color: #455a64;
 	vertical-align: top;
 	box-sizing: border-box;
 	height: 300px;
-	cursor: pointer;
-	color: #455a64;
 	position: relative;
 	transition: 0.4s ease;
 	
@@ -107,9 +107,15 @@
 			font-family: $serif;
 			font-size: 18px;
 			line-height: 22px;
-			border: none;
+			border: 0;
 			color: #575757;
 			resize: none;
+			
+			&:focus {
+				border: 0;
+				outline: none;
+				-moz-appearance: none;
+			}
 		}
 		
 		&__submit {
@@ -127,6 +133,18 @@
 			font-size: 20px;
 			z-index: 1000;
 			transition: 0.4s ease;	
+			
+			&_scroll {
+				position: fixed;
+				display: none;
+				width: 80px;
+				height: 80px;
+				line-height: 80px;
+				font-size: 40px;
+				-webkit-box-shadow: 0px 0px 26px -1px rgba(0,0,0,0.64);
+				-moz-box-shadow: 0px 0px 26px -1px rgba(0,0,0,0.64);
+				box-shadow: 0px 0px 26px -1px rgba(0,0,0,0.64);
+			}
 			
 			&:hover {
 				background: #1976d2;
@@ -182,8 +200,19 @@
   	  width: 50%;
  	}
 	  
-	@media screen and (max-width: 361px) {
+	@media screen and (max-width: 480px) {
   	  width: 100%;
+	  height: 120px;
+	  padding: 0;
+		
+		&-add {
+			height: 200px;
+			
+			&:hover {
+				height: 350px;
+			}
+		
+		}
  	}
 
 }
