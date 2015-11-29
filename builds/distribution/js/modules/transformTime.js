@@ -48,6 +48,16 @@ define(['jquery'], function () {
 			return result;	
 		}
 		
+		transformTime.prototype.isNew = function(time) {
+			var timeNow = Date.now();
+			
+			if((timeNow - time) < this.hour) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 		
 		var newTransformTime = new transformTime();
 		

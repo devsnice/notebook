@@ -13,6 +13,7 @@ define(['jquery', 'lockr'], function () {
 		model.prototype.add = function(note) {
 			var currentCount = Lockr.get("countElems"),
 				currentNote  = Lockr.get("countNotes");
+		
 			
 			Lockr.set(currentNote, note);
 			Lockr.set("countNotes", currentNote + 1);
@@ -59,11 +60,10 @@ define(['jquery', 'lockr'], function () {
 		}
 		
 		// Method for getting last-note form local-storage
-		model.prototype.getLast = function() {
-			// -1, cause (id = 0,1,2)
-			var lastNote = Lockr.get(this.getCountElements()-1);
+		model.prototype.getById = function(id) {
+			var needNote = Lockr.get(id);
 			
-			return lastNote;
+			return needNote;
 		}
 
 		// Function for getting information about amount elements in local-storage, notes and empty-notes(note which was deleted)

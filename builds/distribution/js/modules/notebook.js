@@ -22,10 +22,12 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			date = date - new Date(0);
 			// create new note-object
 			var newNote = new note(text, date, this.transformTime.live(date), newNoteId);
-			// add in Model
+			// Add in Model
 			this.model.add(newNote);
-			// 
+			// Show new count
 			this.viewCount();
+			
+			return newNote;
 		}
 		
 		notebook.prototype.deleteNote = function(id) {
@@ -61,28 +63,38 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			this.countView.html(result);
 		}
 		
-		notebook.prototype.viewLast = function() {
-			var lastNote = this.model.getLast();
-							
-			var currentNote = new note(lastNote.text, lastNote.date, this.transformTime.live(lastNote.date), this.model.getCountElements());
-				
-				currentNote.view(this.elemAdd);
-		}
-		
 		notebook.prototype.viewAllNote = function() {
 			var notes = this.model.getAll();
 					
 					
 			for(var i = 0, length = notes.length; i < length; i++) {
 				if(notes[i] != null) {
-					var currentNote = new note(notes[i].text, notes[i].date, this.transformTime.live(notes[i].date), i);
-					currentNote.view(this.elemAdd);
+					var currentNote = new note(notes[i].text, notes[i].date, this.transformTime.live(notes[i].date), i, this.transformTime.isNew(notes[i].date));
+					currentNote.view();
 				}
 			}
 		}
 		
+		notebook.prototype.updateTime = function() {
+			var currentNotes = $(".note-item");
+			
+			
+			for(var index = 0, length = currentNotes.length; index < length; index++){
+				var currentElem = $(currentNotes[index]);
+				
+			
+				if(currentElem.data("new") == true) {
+					var currentElemId = currentElem.data("id"),
+					time = this.model.getById(currentElemId).date,
+					newRealTime = this.transformTime.live(time);
+						
+					$(currentNotes[index]).find(".note-data__date").html(newRealTime);		
+				}
+			
+			}
+			
+		}
 		
-	
 		// Controller
 		// Initialize notebook, add binds elem
 		function init(notes) {
@@ -90,7 +102,7 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 				notebook : notes
 			}
 			
-			
+			//Lockr.flush();
 			notes.viewCount();
 						
 			// Create new element in local-storage
@@ -109,7 +121,7 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			}
 			
 			
-				// Handler for adding new note
+			// Handler for adding new note
 			notes.elemSubmit.click(eventData, function(e) {
 							
 					var text = $(eventData.notebook.elemAdd).val(),
@@ -119,10 +131,10 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 					if(notes.validate(text)) {
 									
 						// Create new note
-						eventData.notebook.addNote(text, date);
+						var newNote = eventData.notebook.addNote(text, date);
 						
 						// View new note
-						eventData.notebook.viewLast();
+						newNote.view();
 						
 						// Clear textarea
 						$(eventData.notebook.elemAdd).val(null);
@@ -146,6 +158,7 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 					var noteDelete = $(elemClicked).parents(".note"),
 						noteDeleteId = noteDelete.data("id");
 						noteDelete.fadeOut(600);
+						noteDelete.remove();
 						
 					eventData.notebook.deleteNote(noteDeleteId);
 				}
@@ -170,6 +183,12 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 					$("#js-submit-mobile").fadeOut("slow");	
 				}
 			});
+			
+			
+			setInterval(function(){
+				notes.updateTime();
+			}, 10000);
+			
 			
 		}
 		
