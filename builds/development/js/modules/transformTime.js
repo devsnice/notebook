@@ -11,8 +11,9 @@ define(['jquery'], function () {
 			this.month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 		}
 		
+		// method for transform time in string
 		transformTime.prototype.live = function(time) {
-			var timeNow = Date.now(),
+			var timeNow = Date.now(Date.UTC),
 				timeCreate = new Date(time),
 				timePass = timeNow - time,
 				result = '';
@@ -26,20 +27,31 @@ define(['jquery'], function () {
 				case (timePass >= this.minute && timePass < this.hour) :
 					result = parseInt(timePass / this.minute) + " minutes ago";
 					break;
+					
 				// If passed more than hour
 				case(timePass >= this.hour) :
 					var timeNowDate = new Date(timeNow),
-						timePassDate = new Date(timePass);
+						timePassDate = new Date(time),
+						minutes = timeCreate.getMinutes() > 9 ? timeCreate.getMinutes() : "0" + timeCreate.getMinutes(),
+						countWeekDayBetween = Math.abs((timeNowDate.getDay() - timePassDate.getDay())); 
 					
-					if(((timeNowDate.getDay() - timePassDate.getDay()) != 1) && (timePass <= this.week) ) {
-						var minutes = timeCreate.getMinutes() > 9 ? timeCreate.getMinutes() : "0" + timeCreate.getMinutes();
+					switch(true) {
 						
-						result = timeCreate.getDate() + " " + this.month[timeCreate.getMonth()] + " at " + timeCreate.getHours() + ":" + minutes;
+						// If it was today
+						case((countWeekDayBetween == 0) && (timePass < this.week) ) :
+							result = "Today, at " + timeCreate.getHours() + ":" + minutes;
+							break;
+						
+						// If it was yesterday
+						case((countWeekDayBetween == 1) && (timePass < this.week) ) :
+							result = "Yesterday, at " + timeCreate.getHours() + ":" + minutes;
+							break;
+							
+						default :
+							result = timeCreate.getDate() + " " + this.month[timeCreate.getMonth()] + " at " + timeCreate.getHours() + ":" + minutes;
+							break;
 					}
-					// If it was yesterday
-					else {
-						result = "Yesterday, at " + timeCreate.getHours() + ":" + timeCreate.getMinutes();
-					}
+					
 					break;
 				default :
 					result = timePass;	

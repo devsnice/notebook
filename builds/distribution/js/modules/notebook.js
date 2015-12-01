@@ -15,6 +15,7 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			this.model = new model()
 		}
 		
+		// Method for adding new note(text, date) in notelist
 		notebook.prototype.addNote = function(text, date) {
 			var newNoteId = this.model.getCount();
 			
@@ -30,11 +31,15 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			return newNote;
 		}
 		
+		// Delete note with id from notelist
 		notebook.prototype.deleteNote = function(id) {
+			// delete from model
 			this.model.delete(id);
+			// view new amount of elements
 			this.viewCount();
 		}
 		
+		// Validation of note
 		notebook.prototype.validate = function(text) {
 			if(text.length >= 5 && text.length <= 700) {
 				return true;
@@ -44,6 +49,7 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			}
 		}
 		
+		// Method for viewing amount of notes in notelist
 		notebook.prototype.viewCount = function() {
 			var count = this.model.getCountElements(),
 				result = "";
@@ -63,30 +69,35 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			this.countView.html(result);
 		}
 		
+		// Method for viewing all notes 
 		notebook.prototype.viewAllNote = function() {
-			var notes = this.model.getAll();
+			var notes = this.model.getAll(),
+				noteTemp = new note();
 					
 					
 			for(var i = 0, length = notes.length; i < length; i++) {
 				if(notes[i] != null) {
-					var currentNote = new note(notes[i].text, notes[i].date, this.transformTime.live(notes[i].date), i, this.transformTime.isNew(notes[i].date));
-					currentNote.view();
+					//var currentNote = new note(notes[i].text, notes[i].date, this.transformTime.live(notes[i].date), i, this.transformTime.isNew(notes[i].date));
+					 notes[i].viewTime = this.transformTime.live(notes[i].date);
+					 notes[i].isNewNote = this.transformTime.isNew(notes[i].date);
+					 
+					 noteTemp.view.call(notes[i]);
 				}
 			}
 		}
 		
+		// Method for auto-update time of notes
 		notebook.prototype.updateTime = function() {
 			var currentNotes = $(".note-item");
-			
 			
 			for(var index = 0, length = currentNotes.length; index < length; index++){
 				var currentElem = $(currentNotes[index]);
 				
-			
+				// For optimize this process, we calculate and view just date of new element, which was created less than hour ago
 				if(currentElem.data("new") == true) {
 					var currentElemId = currentElem.data("id"),
-					time = this.model.getById(currentElemId).date,
-					newRealTime = this.transformTime.live(time);
+						time = this.model.getById(currentElemId).date,
+						newRealTime = this.transformTime.live(time);
 						
 					$(currentNotes[index]).find(".note-data__date").html(newRealTime);		
 				}
@@ -192,7 +203,11 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 			
 		}
 		
-		var notes = new notebook(elemAdd, elemList, elemCount, elemSubmit);	
+		
+		// create new notebook
+		var notes = new notebook(elemAdd, elemList, elemCount, elemSubmit);
+		
+		// init all bind and firstly work with elements of user's notelist
 		init(notes);
 		
 		return notes;

@@ -1,17 +1,17 @@
-// include blocks
-@import "_excess";
-@import "_reset";
-@import "_const";
+// include extend-blocks
+@import "extend/_excess";
+@import "extend/_reset";
+@import "extend/_const";
 
-// Include extend-blocks
+// Include blocks
 @import "block/_wrapper";
 @import "block/_header";
 @import "block/_logotype";
 @import "block/_profile";
-@import "block/_button";
+//@import "block/_button";
+//@import "block/_preloader";
 
 // Note
-@import "block/_newnote";
 @import "block/_note";
 
 // some code

@@ -1,0 +1,41 @@
+@keyframes preloader {
+    from {
+		transform: rotate(0deg);
+	}
+    to {
+		transform: rotate(360deg);
+	}
+}
+
+body {
+	position: relative;
+}
+
+.preloader {
+	&-wrapper {
+		z-index: 1000;
+		position: fixed;
+		top: 0;
+		left: 0;
+		background: rgba(0,0,0,0.7);
+		width: 100%;
+		height: 100%;
+	}
+	
+	vertical-align: center;
+	text-align: center;
+	font-size: 40px;
+	animation-name: preloader;
+    animation-duration: 3s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in;
+	color: #fff;
+	height: 16px;
+	width: 16px;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	margin: auto;
+}
