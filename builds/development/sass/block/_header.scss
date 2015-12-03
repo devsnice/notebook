@@ -1,4 +1,11 @@
 .header {
 	height: 100px;
 	line-height: 100px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 10000;
+	background: #fff;
+	box-shadow: 0 0 8px rgba(0,0,0,0.075);
 }

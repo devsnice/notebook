@@ -2,6 +2,14 @@
 	font-family: $istok;
 	font-size: 2em;
 	font-weight: 300;
+	color: #96c3e7;
+	
+	.fa {
+		position: relative;
+		top: 2px;
+		right: -4px;
+		color:#4ea7ef;
+	}
 	
 	&_header {
 		float: left;
