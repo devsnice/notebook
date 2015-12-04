@@ -23,6 +23,7 @@ define(['jquery'], function () {
 				case (timePass <= this.minute) :
 					result = "A moment ago";
 					break;
+					
 				// If passed less than hour
 				case (timePass >= this.minute && timePass < this.hour) :
 					result = parseInt(timePass / this.minute) + " minutes ago";

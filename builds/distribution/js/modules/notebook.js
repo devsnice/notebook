@@ -113,7 +113,6 @@ define(['jquery', 'model', 'note', 'transformTime'],function(jquery, model, note
 				notebook : notes
 			}
 			
-			//Lockr.flush();
 			notes.viewCount();
 						
 			// Create new element in local-storage

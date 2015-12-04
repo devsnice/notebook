@@ -3,7 +3,8 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
     concat = require('gulp-concat'),
-    csso = require('gulp-csso');
+    csso = require('gulp-csso'),
+    connect = require('gulp-connect');
     
 var bc = './bower_components/';
 
@@ -26,15 +27,13 @@ gulp.task('html', function() {
     .pipe(gulp.dest('builds/distribution/'))
 });
 
-// gulp.task('webserver', function() {
-//   gulp.src('app')
-//     .pipe(webserver({
-//       path: '/builds/distribution',
-//       livereload: true,
-//       directoryListing: true,
-//       open: true
-//     }));
-// });
+gulp.task('connect', function() {
+  connect.server({
+    port: 35729,
+    root: 'builds/distribution',
+    livereload: true
+  });
+});
 
 gulp.task('watch', function() {
   gulp.watch('builds/development/js/**/*.js', ['js']);
@@ -48,7 +47,7 @@ gulp.task('libs', function() {
 });
 
 gulp.task('default', [
-//  'webserver',
+  'connect',
   'libs',
   'html',
   'js',
