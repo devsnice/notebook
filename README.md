@@ -1,6 +1,6 @@
 Notebook
 =============
-Small notebook for writting new notes
+The small responsive notebook for writting new notes
 
 Installing
 ----------
@@ -25,3 +25,8 @@ Browsers
     Opera 11.5+
     Safari 5.0+
     
+    
+Writing with
+----------
+*gulp, require.js, sass*
+
